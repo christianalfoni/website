@@ -35,3 +35,15 @@ async function renderPage(page) {
   return render();
 }
 ```
+
+If your dynamic import contains imports that also exists in the parent bundle, those will be hoisted. That means if you would import:
+
+```javascript
+import moment from 'moment'
+
+import('./pages/about').then(function (page) {
+  // Render page
+});
+```
+
+and the `about` page also imports the library `moment`, it will not be part of the `about` bundle. The `about` bundle will use `moment` from the parent bundle. This prevents loading up libraries and other common application modules multiple times.
